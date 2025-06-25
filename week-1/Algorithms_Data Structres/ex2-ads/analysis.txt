@@ -1,0 +1,10 @@
+| Algorithm     | Time Complexity | Best Case | Average Case  | Worst Case |
+| ------------- | --------------- | --------- | ------------- | ---------- |
+| Linear Search | O(n)            | O(1)      | O(n/2) → O(n) | O(n)       |
+| Binary Search | O(log n)        | O(1)      | O(log n)      | O(log n)   |
+----------------------------------------------------------------------------
+FROM MY ANALYSIS:
+
+  Binary Search is faster (O(log n)), but requires the data to be sorted.
+
+  Linear Search works on unsorted data, but is slower for large datasets (O(n)).
