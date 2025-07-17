@@ -1,0 +1,166 @@
+Below is a full single shell script that will:
+
+✅ 1. Create both account and loan microservices
+✅ 2. Set them up with controllers
+✅ 3. Configure different ports (8080 and 8081)
+✅ 4. Build them
+✅ 5. Run them
+
+✅✅ 👉 FULL setup-all.sh SCRIPT
+bash
+Copy
+Edit
+#!/bin/bash
+
+# === CONFIG ===
+BASE_DIR=$(pwd)
+GROUP="com.cognizant"
+
+# === Create microservices folder ===
+mkdir -p microservices
+cd microservices
+
+# === Function to create microservice ===
+create_service() {
+  ARTIFACT=$1
+  PORT=$2
+  PACKAGE="$GROUP.$ARTIFACT"
+  CONTROLLERPACKAGE="controller"
+  CONTROLLERNAME="${ARTIFACT^}Controller"
+  MAINCLASS="${ARTIFACT^}Application"
+
+  echo "=== Creating $ARTIFACT microservice on port $PORT ==="
+
+  # === Create project folder ===
+  mkdir -p $ARTIFACT
+  cd $ARTIFACT
+
+  # === Download Spring Boot project zip ===
+  curl "https://start.spring.io/starter.zip?type=maven-project&language=java&groupId=$GROUP&artifactId=$ARTIFACT&dependencies=web,devtools" -o project.zip
+
+  # === Unzip ===
+  unzip project.zip
+  rm project.zip
+
+  # === Create Controller ===
+  mkdir -p src/main/java/$(echo $PACKAGE | tr '.' '/')
+  mkdir -p src/main/java/$PACKAGE/$CONTROLLERPACKAGE
+
+  if [ "$ARTIFACT" = "account" ]; then
+    cat > src/main/java/$PACKAGE/$CONTROLLERPACKAGE/$CONTROLLERNAME.java <<EOL
+package $PACKAGE.$CONTROLLERPACKAGE;
+
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.util.HashMap;
+import java.util.Map;
+
+@RestController
+public class $CONTROLLERNAME {
+    @GetMapping("/accounts/{number}")
+    public Map<String, Object> getAccountDetails(@PathVariable String number) {
+        Map<String, Object> response = new HashMap<>();
+        response.put("number", number);
+        response.put("type", "savings");
+        response.put("balance", 234343);
+        return response;
+    }
+}
+EOL
+
+  elif [ "$ARTIFACT" = "loan" ]; then
+    cat > src/main/java/$PACKAGE/$CONTROLLERPACKAGE/$CONTROLLERNAME.java <<EOL
+package $PACKAGE.$CONTROLLERPACKAGE;
+
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.util.HashMap;
+import java.util.Map;
+
+@RestController
+public class $CONTROLLERNAME {
+    @GetMapping("/loans/{number}")
+    public Map<String, Object> getLoanDetails(@PathVariable String number) {
+        Map<String, Object> response = new HashMap<>();
+        response.put("number", number);
+        response.put("type", "car");
+        response.put("loan", 400000);
+        response.put("emi", 3258);
+        response.put("tenure", 18);
+        return response;
+    }
+}
+EOL
+
+  fi
+
+  # === Create application.properties ===
+  echo "server.port=$PORT" > src/main/resources/application.properties
+
+  # === Build ===
+  mvn clean package
+
+  cd ..
+}
+
+# === Create Account Microservice ===
+create_service "account" "8080"
+
+# === Create Loan Microservice ===
+create_service "loan" "8081"
+
+echo "=== Both services created ==="
+
+# === How to run both ===
+echo "To run both in parallel:"
+echo "Open two terminals and run:"
+echo "cd microservices/account && mvn spring-boot:run"
+echo "cd microservices/loan && mvn spring-boot:run"
+
+echo "=== Done Buddy! 🚀 ==="
+✅✅✅ How to Use
+1️⃣ Save this script as setup-all.sh
+2️⃣ Make it executable:
+
+bash
+Copy
+Edit
+chmod +x setup-all.sh
+3️⃣ Run it:
+
+bash
+Copy
+Edit
+./setup-all.sh
+4️⃣ After it finishes, you will have:
+
+Copy
+Edit
+microservices/
+ ├── account/
+ └── loan/
+5️⃣ Run each service in its own terminal:
+
+bash
+Copy
+Edit
+# Terminal 1
+cd microservices/account
+mvn spring-boot:run
+
+# Terminal 2
+cd microservices/loan
+mvn spring-boot:run
+✅✅✅ Access in Browser
+Account: http://localhost:8080/accounts/00987987973432
+
+Loan: http://localhost:8081/loans/H00987987972342
+
+📌 Important
+Replit limitation: You can’t run both on different ports in one Repl.
+➜ You must create two separate Repl instances, or use a local shell, or GitHub Codespaces.
+➜ This script works best in local Linux/macOS shell, WSL, or Codespaces.
