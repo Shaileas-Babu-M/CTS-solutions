@@ -1,0 +1,40 @@
+.scoreBox {
+  border: 1px solid hsl(20, 5.9%, 90%);
+  padding: 20px;
+  margin: 10px;
+  border-radius: 12px;
+  background: hsl(0, 0%, 100%);
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+}
+
+.scoreBox h2 {
+  color: hsl(20, 14.3%, 4.1%);
+  margin-bottom: 1rem;
+}
+
+.scoreBox .score-item {
+  background: hsl(60, 4.8%, 95.9%);
+  padding: 0.75rem;
+  border-radius: 8px;
+  margin-bottom: 0.5rem;
+  border: 1px solid hsl(20, 5.9%, 90%);
+}
+
+.scoreBox .score-label {
+  font-weight: 500;
+  color: hsl(25, 5.3%, 44.7%);
+}
+
+.scoreBox .score-value {
+  font-weight: 600;
+  color: hsl(20, 14.3%, 4.1%);
+}
+
+.scoreBox .average-result {
+  background: linear-gradient(135deg, hsl(207, 90%, 54%) 0%, hsl(207, 90%, 44%) 100%);
+  color: hsl(211, 100%, 99%);
+  padding: 1rem;
+  border-radius: 8px;
+  text-align: center;
+  margin-top: 1rem;
+}
